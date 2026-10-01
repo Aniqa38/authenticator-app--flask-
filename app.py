@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request,render_template, redirect,session
 from flask_sqlalchemy import SQLAlchemy
 import bcrypt
@@ -5,7 +6,8 @@ import bcrypt
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db = SQLAlchemy(app)
-app.secret_key = 'secret_key'
+# Read the secret key from an environment variable; the fallback is for local practice only
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-only-change-me')
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -65,7 +67,7 @@ def login():
 
 @app.route('/dashboard')
 def dashboard():
-    if session['email']:
+    if session.get('email'):
         user = User.query.filter_by(email=session['email']).first()
         return render_template('dashboard.html',user=user)
     
