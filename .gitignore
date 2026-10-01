@@ -1,0 +1,9 @@
+# Local database created when the app runs
+*.db
+instance/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
